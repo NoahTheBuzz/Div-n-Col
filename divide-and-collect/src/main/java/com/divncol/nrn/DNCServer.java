@@ -32,12 +32,12 @@ class DNCHandler implements Runnable {
     private final BufferedReader reader;
     private final PrintWriter writer;
 
-    private final LinkedBlockingQueue<> queue;
+    private final LinkedBlockingQueue<String> queue;
 
     private String username;
     private String password;
 
-    public DNCHandler(Socket connection) {
+    public DNCHandler(Socket connection) throws IOException {
         this.connection = connection;
         this.reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         this.writer = new PrintWriter(connection.getOutputStream());
