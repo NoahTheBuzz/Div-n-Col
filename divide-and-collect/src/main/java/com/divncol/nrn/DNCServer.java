@@ -32,7 +32,7 @@ class DNCHandler implements Runnable {
     private final BufferedReader reader;
     private final PrintWriter writer;
 
-    private final LinkedBlockingQueue<String> queue;
+    private LinkedBlockingQueue<String> queue;
 
     private String username;
     private String password;
@@ -41,7 +41,7 @@ class DNCHandler implements Runnable {
         this.connection = connection;
         this.reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         this.writer = new PrintWriter(connection.getOutputStream());
-        this.queue = queue;
+        
     }
 
     @Override

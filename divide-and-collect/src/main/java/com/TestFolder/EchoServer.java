@@ -1,38 +1,32 @@
 package com.TestFolder;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class EchoServer {
     
     public static void main(String[] args) {
-        try {
-            ServerSocket server = new ServerSocket(15636);
-            ExecutorService service = Executors.newCachedThreadPool();
+        try(ServerSocket server = new ServerSocket(15636);) {
+            Socket connection = server.accept();
+            System.out.println("[SERVER] Connection established");
 
-            while(true) {
-                Socket connection = server.accept();
-                service.submit(new EchoHandler(connection));
+            InputStream reader = connection.getInputStream();
+            OutputStream writer = connection.getOutputStream();
+
+            int c;
+            while ((c = reader.read()) != -1) {
+                writer.write(c);
+                writer.flush();
             }
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
 
-class EchoHandler implements Runnable{
-    private final Socket connection;
+            System.out.println("[SERVER] Echoed everything");
 
-    public EchoHandler(Socket connection) {
-        this.connection = connection;
-    }
+            connection.close();
 
-    @Override
-    public void run() {
-        try {
-            connection.getOutputStream().write("Hello to DivNCol".getBytes());
+            System.out.println("[SERVER] Connection closed");
+
         }catch(Exception e) {
             e.printStackTrace();
         }
